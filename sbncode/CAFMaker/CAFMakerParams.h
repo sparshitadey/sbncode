@@ -350,10 +350,10 @@ namespace caf
       "" //Empty by default, configured in icaruscode cafmaker_defs
     };
 
-    Atom<art::InputTag> NuGraphSliceHitLabel {
-      Name("NuGraphSliceHitLabel"),
-      Comment("Label of NuGraph slice hit map."),
-      "" //Empty by default, please set to e.g. art::InputTag("nuslhits")
+    Atom<art::InputTag> NuGraphSlicesLabel {
+      Name("NuGraphSlicesLabel"),
+      Comment("Label of slices that have NuGraph inference."),
+      "" //Empty by default, please set to e.g. art::InputTag("NCCSlices")
     };
 
     Atom<art::InputTag> NuGraphFilterLabel {
@@ -366,6 +366,30 @@ namespace caf
       Name("NuGraphSemanticLabel"),
       Comment("Label of NuGraph semantic."),
       "" //Empty by default, please set to e.g. art::InputTag("NuGraph","semantic")
+    };
+
+    Atom<bool> UsePandoraAfterNuGraph {
+      Name("UsePandoraAfterNuGraph"),
+      Comment("Whether to use the second pass Pandora outputs for NuGraph reco."),
+      false
+    };
+
+    Atom<float> NuGraphFilterCut {
+      Name("NuGraphFilterCut"),
+      Comment("Cut on the NuGraph2 filter score to define hit as signal or noise."),
+      0.5
+    };
+
+    Atom<float> NuGraphHIPTagWireDist {
+      Name("NuGraphHIPTagWireDist"),
+      Comment("TPC wire distance from the vertex used to count NuGraph2–tagged HIP hits."),
+      10
+    };
+
+    Atom<float> NuGraphHIPTagTickDist {
+      Name("NuGraphHIPTagTickDist"),
+      Comment("TPC tick distance from the vertex used to count NuGraph-2–tagged HIP hits."),
+      50
     };
 
     Atom<string> OpFlashLabel {
