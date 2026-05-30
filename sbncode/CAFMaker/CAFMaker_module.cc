@@ -2056,6 +2056,7 @@ void CAFMaker::produce(art::Event& evt) noexcept {
       std::vector<art::Ptr<anab::FeatureVector<5>>> ng2_semantic_vec;
       art::FindOneP<anab::FeatureVector<1>> findOneFilter(slcHits, evt, fParams.NuGraphFilterLabel().label() + slice_tag_suff + ":" + fParams.NuGraphFilterLabel().instance());
       art::FindOneP<anab::FeatureVector<5>> findOneSemantic(slcHits, evt, fParams.NuGraphSemanticLabel().label() + slice_tag_suff + ":" + fParams.NuGraphSemanticLabel().instance());
+      std::cout << "DEBUG: slcHits.size()=" << slcHits.size() << " findOneFilter.isValid()=" << findOneFilter.isValid() << " label=" << (fParams.NuGraphFilterLabel().label() + slice_tag_suff + ":" + fParams.NuGraphFilterLabel().instance()) << std::endl;
 
       // filter
       if (findOneFilter.isValid()) {
