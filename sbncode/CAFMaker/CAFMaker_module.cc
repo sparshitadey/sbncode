@@ -2089,14 +2089,39 @@ void CAFMaker::produce(art::Event& evt) noexcept {
           }
         }
       }
-
-      if (ng2_filter_vec.size() > 0 || ng2_semantic_vec.size() > 0) {
+    //==============================Old==============================//
+    //  if (ng2_filter_vec.size() > 0 || ng2_semantic_vec.size() > 0) {
+    //    FillSliceNuGraph(slcHits, ng2_filter_vec, ng2_semantic_vec, fmPFPartHits,
+    //                     vtx_wire, vtx_tick, fParams.NuGraphHIPTagWireDist(), fParams.NuGraphHIPTagTickDist(),
+    //                     fParams.NuGraphFilterCut(), recslc);
+    //  }
+    
+    //==============================End Old==============================//
+    //==============================New==============================//
+    if (ng2_filter_vec.size() > 0 || ng2_semantic_vec.size() > 0) {
         FillSliceNuGraph(slcHits, ng2_filter_vec, ng2_semantic_vec, fmPFPartHits,
                          vtx_wire, vtx_tick, fParams.NuGraphHIPTagWireDist(), fParams.NuGraphHIPTagTickDist(),
                          fParams.NuGraphFilterCut(), recslc);
       }
-    }
 
+      // Compute ng_filt_pass_frac from ICARUSFilteredNuSliceHitsProducer I/O sizes.
+      // nPre = NGMultiSlice:filter FeatureVector collection size
+      //        = hits that NuGraph scored = "Number of hits before" printout
+      // nPost = ngfilteredhits hit collection size
+      //        = "Number of hits after" printout
+      // This gives the same ~0.79 fraction seen in the Stage 1 logs.
+      art::Handle<std::vector<anab::FeatureVector<1>>> ngFilterVecHandle;
+      evt.getByLabel(art::InputTag("NGMultiSlice" + slice_tag_suff, "filter"), ngFilterVecHandle);
+      art::Handle<std::vector<recob::Hit>> ngFilteredHitsHandle;
+      GetByLabelStrict(evt, "ngfilteredhits" + slice_tag_suff, ngFilteredHitsHandle);
+      if (ngFilterVecHandle.isValid() && ngFilteredHitsHandle.isValid() &&
+          ngFilterVecHandle->size() > 0) {
+        recslc.ng_filt_pass_frac = float(ngFilteredHitsHandle->size()) /
+                                   float(ngFilterVecHandle->size());
+      }
+    }
+    //==============================End New==============================//
+  
     FillSliceVars(*slice, primary, producer, recslc);
     FillSliceMetadata(primary_meta, recslc);
     FillSliceFlashMatch(fmatch_map["fmatch"], recslc.fmatch);
